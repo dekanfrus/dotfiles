@@ -1,12 +1,20 @@
-#alias ls='ls --color=auto'
-alias ls='lsd --group-dirs first'
+alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+command -v lsd &> /dev/null && alias ls='lsd --group-dirs first'
+command -v colorls &> /dev/null && alias ls='colorls --sd --gs'
+command -v htop &> /dev/null && alias top='htop'
+command -v gotop &> /dev/null && alias top='gotop -p'
+
+alias vi='vim'
 alias pacman='pacman --color=always'
 alias scss='scss --no-cache --quiet --sourcemap=none'
-alias vi='vim'
 alias xclip='xclip -selection c'
+alias ll='ls -lha'
+alias llr='ls -lhaR'
+alias llt='ls --tree'
 
 
 export VISUAL=vim
@@ -41,7 +49,7 @@ setopt HIST_BEEP
 setopt INTERACTIVE_COMMENTS
 setopt MAGIC_EQUAL_SUBST
 
-HISTFILE="$HOME/.zsh_history"
+HISTFILE="$HOME/.cache/zsh_history"
 HIST_STAMPS=mm/dd/yyyy
 DISABLE_UPDATE_PROMPT=true
 HISTSIZE=5000
@@ -61,12 +69,12 @@ bindkey '^[[1;5D' backward-word
 bindkey '^[[3;5~' kill-word
 
 # ----- promt -----
-PS1="%F{cyan} %~ >%F{blue}> %F{white}"
+PS1="%F{cyan} %~ >%F{blue}> %F{reset}"
 
 # ----- plugins -----
-PLUGINS_DIR=/usr/share
+PLUGINS_DIR=/usr/share/zsh/plugins
 source $PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 autoload compinit && compinit
 
@@ -74,13 +82,12 @@ autoload compinit && compinit
 
 POWERLEVEL9K_MODE=nerdfont-complete
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
+POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K=truncate_beginning
 POWERLEVEL9K_TIME_BACKGROUND=black
 POWERLEVEL9K_TIME_FOREGROUND=white
 POWERLEVEL9K_TIME_FORMAT=%D{%I:%M}
-POWERLEVEL9K_DATE_FORMAT='%D{%m.%d.%y}'
 POWERLEVEL9K_STATUS_VERBOSE=false
 POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
 POWERLEVEL9K_VCS_CLEAN_BACKGROUND=green
@@ -105,7 +112,7 @@ POWERLEVEL9K_CUSTOM_OS_ICON='echo   $(whoami) '
 POWERLEVEL9K_CUSTOM_OS_ICON_BACKGROUND=red
 POWERLEVEL9K_CUSTOM_OS_ICON_FOREGROUND=white
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_os_icon ssh root_indicator dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs date time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs time ram)
 
 if [[ $(tty) == /dev/pts/* ]]; then
 	source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme;
@@ -123,13 +130,12 @@ function lazygit() {
 	git push origin HEAD
 }
 
-# ----------------------------------- MISC -----------------------------------
-# Gnome terminal Flat-Remix color-scheme
-dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/palette "['#1F2229', '#D41919', '#5EBDAB', '#FEA44C', '#367bf0', '#BF2E5D', '#49AEE6', '#FFFFFF', '#8C42AB', '#EC0101', '#47D4B9', '#FF8A18', '#277FFF', '#D71655', '#05A1F7', '#FFFFFF']"
-dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/bold-is-bright true
+function find() {
+	if [ $# = 1 ];
+	then
+		command find . -iname "*$@*"
+	else
+		command find "$@"
+	fi
+}
 
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-
-if [ -f ~/.aliases ]; then
-    . ~/.aliases
-fi
