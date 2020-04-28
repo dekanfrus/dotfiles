@@ -72,8 +72,7 @@ bindkey '^[[3;5~' kill-word
 PS1="%F{cyan} %~ >%F{blue}> %F{reset}"
 
 # ----- plugins -----
-PLUGINS_DIR=/usr/share/zsh/plugins
-source $PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 autoload compinit && compinit
@@ -115,7 +114,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_os_icon ssh root_indicator dir dir_wri
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs time ram)
 
 if [[ $(tty) == /dev/pts/* ]]; then
-	source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme;
+	source $HOME/.oh-my-zsh/themes/powerlevel10k/powerlevel10k.zsh-theme;
 else
 	clear
 	echo
